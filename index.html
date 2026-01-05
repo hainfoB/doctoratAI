@@ -3,456 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correction Détaillée: Doctorat IA USTO 2022-2023 Par Haithem BERKANE Janvier 2026</title>
+    <title>Machine Learning séance 01: USTO 2023, By Haithem BERKANE</title>
+    
+    <!-- Outils graphiques et styles -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; color: #1f2937; }
-        .nav-active { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 600; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; color: #334155; }
+        .nav-active { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 700; }
         
-        /* Glassmorphism & Cards */
+        /* Panneaux style "Verre" */
         .glass-panel {
             background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .theory-card {
-            background: linear-gradient(to right, #eff6ff, #ffffff);
-            border-left: 4px solid #3b82f6;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
         }
 
-        /* Animations */
-        .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Mathematical Formulas Style */
-        .math {
-            font-family: 'Crimson Pro', serif;
-            font-size: 1.15em;
-            font-style: italic;
-            color: #1e40af;
-            background-color: #dbeafe;
-            padding: 0 4px;
-            border-radius: 3px;
-        }
-        .math-block {
-            font-family: 'Crimson Pro', serif;
-            font-size: 1.2em;
+        /* Boîtes de calcul */
+        .calc-box {
+            font-family: 'Courier New', monospace;
             background-color: #f1f5f9;
             padding: 8px;
             border-radius: 6px;
-            text-align: center;
-            margin: 8px 0;
-            border: 1px solid #cbd5e1;
+            border-left: 4px solid #3b82f6;
+            margin: 5px 0;
+            font-size: 0.9em;
         }
+
+        .highlight-success { background-color: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .highlight-error { background-color: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Navbar -->
+    <!-- Navigation -->
     <nav class="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
-                <!-- Logo & Title -->
                 <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 relative rounded-full overflow-hidden border-2 border-blue-600 shadow-md flex-shrink-0">
-                         <img src="5870834889492907890 (2).jpg" alt="Logo" class="h-full w-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=AH&background=2563EB&color=fff'">
+                    <div class="h-10 w-10 relative rounded-full overflow-hidden border-2 border-blue-600 shadow-md">
+                         <img src="https://ui-avatars.com/api/?name=AH&background=2563EB&color=fff" alt="Logo" class="h-full w-full object-cover">
                     </div>
-                    <div class="leading-tight hidden sm:block">
+                    <div>
                         <span class="block text-sm font-bold text-gray-800">Univ USTO-MB</span>
-                        <span class="block text-[10px] text-blue-600 font-bold uppercase tracking-wider">Doctorat IA 2022/2023</span>
+                        <span class="block text-[10px] text-blue-600 font-bold uppercase">Correction Doctorat IA</span>
                     </div>
                 </div>
                 
-                <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-6">
-                    <button onclick="nav('home')" class="nav-btn nav-active px-3 py-2 text-sm transition font-medium" data-target="home">Accueil</button>
-                    <button onclick="nav('ex1')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition font-medium" data-target="ex1">Ex 1: Classification</button>
-                    <button onclick="nav('ex2')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition font-medium" data-target="ex2">Ex 2: Clustering</button>
-                    <button onclick="nav('ex3')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition font-medium" data-target="ex3">Ex 3: Bayes Naïf</button>
-                </div>
-
-                <!-- Mobile Menu Icon -->
-                <div class="md:hidden">
-                    <button onclick="toggleMenu()" class="text-gray-600 focus:outline-none"><i class="fas fa-bars text-xl"></i></button>
+                    <button onclick="nav('home')" class="nav-btn nav-active px-3 py-2 text-sm transition hover:text-blue-600" data-target="home">Accueil</button>
+                    <button onclick="nav('ex1')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition" data-target="ex1">Ex 1: Classification</button>
+                    <button onclick="nav('ex2')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition" data-target="ex2">Ex 2: Clustering</button>
+                    <button onclick="nav('ex3')" class="nav-btn px-3 py-2 text-sm text-gray-500 hover:text-blue-600 transition" data-target="ex3">Ex 3: Bayes Naïf</button>
                 </div>
             </div>
-        </div>
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 p-4 space-y-2">
-            <button onclick="nav('home'); toggleMenu()" class="block w-full text-left px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded">Accueil</button>
-            <button onclick="nav('ex1'); toggleMenu()" class="block w-full text-left px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded">Ex 1: Classification</button>
-            <button onclick="nav('ex2'); toggleMenu()" class="block w-full text-left px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded">Ex 2: Clustering</button>
-            <button onclick="nav('ex3'); toggleMenu()" class="block w-full text-left px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded">Ex 3: Bayes Naïf</button>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
 
-        <!-- HOME SECTION -->
-        <section id="home" class="view-section fade-enter">
-            <div class="bg-gradient-to-br from-blue-700 to-indigo-900 rounded-2xl p-8 sm:p-12 text-white shadow-2xl mb-10 relative overflow-hidden">
+        <!-- ACCUEIL -->
+        <section id="home" class="view-section fade-in">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-10 text-white shadow-xl mb-10 text-center relative overflow-hidden">
                 <div class="relative z-10">
-                    <h1 class="text-3xl sm:text-5xl font-bold mb-6">Correction Doctorat IA</h1>
-                    <p class="text-blue-100 text-lg max-w-2xl mb-8 leading-relaxed">
-                        Bienvenue dans cette correction interactive du sujet de l'USTO. Nous allons explorer pas à pas les algorithmes fondamentaux du Machine Learning : <strong>k-NN</strong>, <strong>MLP</strong>, <strong>K-Means</strong> et <strong>Bayes Naïf</strong>.
+                    <h1 class="text-3xl sm:text-5xl font-bold mb-4">Correction Interactive & Pédagogique</h1>
+                    <p class="text-blue-100 text-lg mb-6 max-w-2xl mx-auto">
+                        Comprendre l'Apprentissage Automatique par la pratique.<br>
+                        Calculs détaillés, simulations visuelles et critiques des modèles.
                     </p>
-                    <button onclick="nav('ex1')" class="bg-white text-blue-900 px-8 py-3 rounded-lg font-bold shadow-lg hover:bg-blue-50 transition transform hover:scale-105">
-                        Démarrer l'Exercice 1 <i class="fas fa-arrow-right ml-2"></i>
+                    <button onclick="nav('ex1')" class="bg-white text-blue-900 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-blue-50 transition transform hover:scale-105">
+                        Commencer l'Exercice 1
                     </button>
                 </div>
-                <!-- Abstract Background Shapes -->
-                <div class="absolute right-0 top-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-                <div class="absolute left-0 bottom-0 w-48 h-48 bg-blue-400 opacity-10 rounded-full blur-2xl transform -translate-x-1/4 translate-y-1/4"></div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="glass-panel p-6 rounded-xl hover:shadow-lg transition cursor-pointer group" onclick="nav('ex1')">
-                    <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition"><i class="fas fa-shapes"></i></div>
-                    <h3 class="font-bold text-xl mb-2 text-gray-800">1. Classification</h3>
-                    <p class="text-sm text-gray-600">Distances k-NN et architecture des réseaux de neurones (MLP). Minima locaux.</p>
-                </div>
-                <!-- Card 2 -->
-                <div class="glass-panel p-6 rounded-xl hover:shadow-lg transition cursor-pointer group" onclick="nav('ex2')">
-                    <div class="w-14 h-14 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition"><i class="fas fa-chart-pie"></i></div>
-                    <h3 class="font-bold text-xl mb-2 text-gray-800">2. Clustering</h3>
-                    <p class="text-sm text-gray-600">K-Means : Normalisation des données, calcul de centroïdes et attribution.</p>
-                </div>
-                <!-- Card 3 -->
-                <div class="glass-panel p-6 rounded-xl hover:shadow-lg transition cursor-pointer group" onclick="nav('ex3')">
-                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-4 text-2xl group-hover:scale-110 transition"><i class="fas fa-notes-medical"></i></div>
-                    <h3 class="font-bold text-xl mb-2 text-gray-800">3. Bayes Naïf</h3>
-                    <p class="text-sm text-gray-600">Probabilités conditionnelles pour le diagnostic médical (Covid-19).</p>
-                </div>
             </div>
         </section>
 
-        <!-- EXERCICE 1 -->
-        <section id="ex1" class="view-section hidden fade-enter">
-            <!-- Theory -->
-            <div class="theory-card p-6 rounded-r-xl mb-8 shadow-sm">
-                <h2 class="text-2xl font-bold text-blue-800 mb-4 flex items-center"><i class="fas fa-graduation-cap mr-2"></i> Rappel Théorique : Classification</h2>
-                <div class="grid md:grid-cols-2 gap-8 text-sm">
+        <!-- EXERCICE 1: CLASSIFICATION -->
+        <section id="ex1" class="view-section hidden fade-in">
+            <!-- Rappel Cours -->
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-xl mb-8">
+                <h2 class="text-xl font-bold text-blue-800 mb-4"><i class="fas fa-lightbulb mr-2"></i> Comprendre les Concepts</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-sm text-gray-700">
                     <div>
-                        <h4 class="font-bold text-blue-700 mb-2 underline decoration-blue-300">Algorithme k-NN</h4>
-                        <p class="mb-2 text-gray-600">Méthode basée sur la proximité. Pour classer un point, on regarde ses $k$ voisins les plus proches.</p>
-                        <div class="math-block">d(A,B) = &Sigma; |x<sub>A</sub> - x<sub>B</sub>|</div>
-                        <p class="text-xs text-gray-500 mt-1">Ici : Distance de Manhattan (somme des valeurs absolues des différences).</p>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-blue-700 mb-2 underline decoration-blue-300">Perceptron Multi-Couches (MLP)</h4>
-                        <p class="mb-2 text-gray-600">Réseau de neurones artificiels. Chaque neurone calcule une somme pondérée suivie d'une activation.</p>
-                        <div class="math-block">y = f(&Sigma; w<sub>i</sub>x<sub>i</sub> + b)</div>
-                        <p class="text-xs text-gray-500 mt-1">Fonction d'activation $f$ : Seuil (Heaviside), Sigmoïde, ReLU...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Data Panel -->
-                <div class="glass-panel p-6 rounded-xl h-fit">
-                    <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Données d'Entraînement</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead><tr class="text-left text-gray-500"><th>ID</th><th>(a, b, c)</th><th>Classe</th><th>Type</th></tr></thead>
-                            <tbody id="knn-train-body"></tbody>
-                        </table>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <h4 class="font-bold text-gray-800 mb-2 text-sm">Tests à effectuer</h4>
-                        <div class="flex gap-2 flex-wrap">
-                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-bold">T2 (1, 5, 5)</span>
-                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-bold">T4 (1, 1, 1)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Simulation Panel -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- k-NN Simulation -->
-                    <div class="glass-panel p-6 rounded-xl bg-white">
-                        <h3 class="font-bold text-indigo-700 mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                            <span>2. Application : k-NN (Manhattan)</span>
-                            <span class="text-xs font-normal bg-indigo-100 px-2 py-1 rounded w-fit">Q3.a</span>
-                        </h3>
-                        
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <!-- T2 Calc -->
-                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                <h4 class="font-bold text-sm mb-2 text-gray-700">Pour T2 (1, 5, 5)</h4>
-                                <div class="text-xs font-mono space-y-1 text-gray-600 mb-2">
-                                    <p>d(T1) = |1-2|+|5-2|+|5-1| = 1+3+4 = 8</p>
-                                    <p>d(T3) = |1-2|+|5-4|+|5-4| = 1+1+1 = <strong class="text-green-600">3</strong> (Min)</p>
-                                    <p>d(T5) = |1-5|+|5-5|+|5-5| = 4+0+0 = 4</p>
-                                </div>
-                                <div class="bg-green-100 text-green-800 p-2 rounded text-xs font-bold text-center">
-                                    Min = 3 (T3)<br>
-                                    &rArr; Classe prédite : Isocèle
-                                </div>
-                            </div>
-                            <!-- T4 Calc -->
-                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                                <h4 class="font-bold text-sm mb-2 text-gray-700">Pour T4 (1, 1, 1)</h4>
-                                <div class="text-xs font-mono space-y-1 text-gray-600 mb-2">
-                                    <p>d(T1) = |1-2|+|1-2|+|1-1| = 1+1+0 = <strong class="text-green-600">2</strong> (Min)</p>
-                                    <p>d(T3) = |1-2|+|1-4|+|1-4| = 1+3+3 = 7</p>
-                                    <p>d(T5) = |1-5|+|1-5|+|1-5| = 4+4+4 = 12</p>
-                                </div>
-                                <div class="bg-red-100 text-red-800 p-2 rounded text-xs font-bold text-center">
-                                    Min = 2 (T1)<br>
-                                    &rArr; Classe prédite : Isocèle <br>(Erreur ! T4 est équilatéral)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- MLP Analysis -->
-                    <div class="glass-panel p-6 rounded-xl bg-white">
-                        <h3 class="font-bold text-purple-700 mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                            <span>3. Analyse Critique : MLP</span>
-                            <span class="text-xs font-normal bg-purple-100 px-2 py-1 rounded w-fit">Q3.b, III.1-3</span>
-                        </h3>
-                        <div class="space-y-4 text-sm">
-                            <div class="flex gap-3">
-                                <div class="step-badge bg-purple-100 text-purple-700 flex-shrink-0">A</div>
-                                <div>
-                                    <strong class="block">Le MLP proposé fonctionne-t-il ?</strong>
-                                    <p class="text-gray-600">Non. Les poids (+2, +3...) sont fixes. Sans apprentissage (Backprop), il ne peut pas s'adapter.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-3">
-                                <div class="step-badge bg-purple-100 text-purple-700 flex-shrink-0">B</div>
-                                <div>
-                                    <strong class="block">Modèle optimal pour enfants ?</strong>
-                                    <p class="text-gray-600"><strong>Arbre de Décision</strong> : Explicable ("Si 3 côtés égaux alors...").</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXERCICE 2 -->
-        <section id="ex2" class="view-section hidden fade-enter">
-            <!-- Theory -->
-            <div class="theory-card p-6 rounded-r-xl mb-8 shadow-sm" style="border-color: #0d9488;">
-                <h2 class="text-2xl font-bold text-teal-800 mb-4 flex items-center"><i class="fas fa-graduation-cap mr-2"></i> Rappel Théorique : Clustering</h2>
-                <div class="grid md:grid-cols-2 gap-8 text-sm">
-                    <div>
-                        <h4 class="font-bold text-teal-700 mb-2 underline decoration-teal-300">Algorithme K-Means</h4>
-                        <p class="mb-2 text-gray-600">Partitionnement itératif en $k$ clusters.</p>
-                        <ol class="list-decimal pl-4 space-y-1 text-gray-600">
-                            <li><strong>Initialisation :</strong> Choix de $k$ centres.</li>
-                            <li><strong>Affectation :</strong> Chaque point rejoint le centre le plus proche (Distance).</li>
-                            <li><strong>Mise à jour :</strong> Le centre devient la moyenne arithmétique des points du cluster.</li>
-                        </ol>
+                        <h3 class="font-bold text-blue-700 mb-2">1. Algorithme k-NN (Voisins proches)</h3>
+                        <p class="mb-2">Imaginez que vous ne connaissez pas le type d'un triangle. Vous regardez autour de lui. Si ses voisins les plus proches sont "Isocèles", alors il est probablement "Isocèle".</p>
+                        <div class="calc-box">Distance = |x1 - x2| + |y1 - y2| + ...</div>
                     </div>
                     <div>
-                        <h4 class="font-bold text-teal-700 mb-2 underline decoration-teal-300">Normalisation Min-Max</h4>
-                        <p class="mb-2 text-gray-600">Essentielle pour comparer des variables d'échelles différentes (Ex: Salaire vs Enfants).</p>
-                        <div class="math-block">x' = (x - min) / (max - min)</div>
-                        <p class="text-xs text-gray-500 mt-1">Transforme les données dans l'intervalle [0, 1].</p>
+                        <h3 class="font-bold text-blue-700 mb-2">2. MLP (Réseau de Neurones)</h3>
+                        <p class="mb-2">Un réseau qui calcule une sortie en fonction d'entrées pondérées. S'il n'apprend pas (poids fixes), il est aussi bête qu'une calculatrice et ne peut pas s'adapter.</p>
                     </div>
                 </div>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Data & Norm -->
-                <div class="lg:col-span-1 space-y-6">
-                    <div class="glass-panel p-6 rounded-xl">
-                        <h3 class="font-bold text-gray-800 mb-3 border-b pb-2">1. Données Normalisées</h3>
-                        <div class="text-xs bg-gray-100 p-2 rounded mb-3 font-mono text-gray-600">
-                            Salaire (P1): [10k, 110k] &Delta;=100k<br>
-                            Enfants (P2): [0, 5] &Delta;=5
-                        </div>
-                        <div class="overflow-y-auto max-h-60">
-                            <table class="w-full text-xs text-center">
-                                <thead class="bg-teal-100 text-teal-800"><tr><th>F</th><th>P1' (Sal)</th><th>P2' (Enf)</th></tr></thead>
-                                <tbody id="norm-table-body" class="divide-y text-gray-600">
-                                    <tr><td>F1</td><td>0.60</td><td>1.00</td></tr>
-                                    <tr><td>F2</td><td>0.20</td><td>0.60</td></tr>
-                                    <tr><td>F3</td><td>0.70</td><td>0.20</td></tr>
-                                    <tr><td>F4</td><td>0.00</td><td>0.20</td></tr>
-                                    <tr><td>F5</td><td>0.40</td><td>0.60</td></tr>
-                                    <tr><td>F6</td><td>1.00</td><td>0.00</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Prediction Block -->
-                    <div class="glass-panel p-6 rounded-xl bg-teal-50 border-teal-200">
-                        <h3 class="font-bold text-teal-900 mb-4 text-lg">3. Prédictions (Attribution Subvention)</h3>
-                        <div class="grid sm:grid-cols-1 gap-4">
-                            <!-- F7 -->
-                            <div class="flex justify-between items-center bg-white p-2 rounded border">
-                                <div>
-                                    <strong class="block text-gray-700 text-xs">F7 (90k, 2)</strong>
-                                    <span class="text-[10px] text-gray-400">Norm: (0.8, 0.4)</span>
-                                </div>
-                                <div id="pred-f7" class="text-xs font-bold text-gray-400">?</div>
-                            </div>
-                            <!-- F8 -->
-                            <div class="flex justify-between items-center bg-white p-2 rounded border">
-                                <div>
-                                    <strong class="block text-gray-700 text-xs">F8 (50k, 3)</strong>
-                                    <span class="text-[10px] text-gray-400">Norm: (0.4, 0.6)</span>
-                                </div>
-                                <div id="pred-f8" class="text-xs font-bold text-gray-400">?</div>
-                            </div>
-                            <!-- F9 -->
-                            <div class="flex justify-between items-center bg-white p-2 rounded border">
-                                <div>
-                                    <strong class="block text-gray-700 text-xs">F9 (20k, 2)</strong>
-                                    <span class="text-[10px] text-gray-400">Norm: (0.1, 0.4)</span>
-                                </div>
-                                <div id="pred-f9" class="text-xs font-bold text-gray-400">?</div>
-                            </div>
-                        </div>
-                        <button onclick="predictAll()" class="mt-4 w-full bg-teal-600 text-white py-2 rounded text-xs font-bold hover:bg-teal-700 transition">Lancer Prédiction</button>
+                <!-- Données -->
+                <div class="lg:col-span-1 glass-panel p-5">
+                    <h3 class="font-bold text-gray-800 mb-3 border-b pb-2">Données (Triangles)</h3>
+                    <table class="w-full text-xs text-left mb-4">
+                        <thead class="bg-gray-100"><tr><th class="p-2">ID</th><th>(a,b,c)</th><th>Type</th></tr></thead>
+                        <tbody>
+                            <tr><td class="p-2 font-bold text-blue-600">T1</td><td>(2,2,1)</td><td>Isocèle</td></tr>
+                            <tr><td class="p-2 font-bold text-blue-600">T3</td><td>(2,4,4)</td><td>Isocèle</td></tr>
+                            <tr><td class="p-2 font-bold text-red-600">T5</td><td>(5,5,5)</td><td>Équilatéral</td></tr>
+                            <tr class="bg-yellow-50"><td class="p-2 font-bold">T2</td><td>(1,5,5)</td><td>? (Test)</td></tr>
+                            <tr class="bg-yellow-50"><td class="p-2 font-bold">T4</td><td>(1,1,1)</td><td>? (Test)</td></tr>
+                        </tbody>
+                    </table>
+                    <button onclick="runKNN()" class="w-full bg-indigo-600 text-white py-2 rounded font-bold hover:bg-indigo-700 shadow mb-2">
+                        Lancer le Calcul k-NN
+                    </button>
+                    
+                    <!-- Critique -->
+                    <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded text-xs text-gray-700">
+                        <strong class="text-red-700 mb-1 block">Pourquoi ce modèle n'est pas idéal ?</strong>
+                        <p>Le k-NN se base sur la distance. T4 (1,1,1) est petit. Son voisin le plus proche est T1 (2,2,1) qui est aussi petit, mais Isocèle. Donc k-NN se trompe.</p>
+                        <p class="mt-2"><strong>Solution Optimale :</strong> Un <u>Arbre de Décision</u>. Il utiliserait une règle simple : "Si les 3 côtés sont égaux, alors Équilatéral". C'est 100% fiable ici.</p>
                     </div>
                 </div>
 
                 <!-- Simulation -->
-                <div class="lg:col-span-2">
-                    <div class="glass-panel p-6 rounded-xl bg-white">
-                        <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
-                            <h3 class="font-bold text-teal-700 text-lg">2. Simulation K-Means (1 Itération)</h3>
-                            <button onclick="runKMeans()" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-teal-700 transition">
-                                <i class="fas fa-play mr-2"></i> Lancer Calcul
-                            </button>
-                        </div>
+                <div class="lg:col-span-2 glass-panel p-5">
+                    <h3 class="font-bold text-indigo-700 mb-3">Détail des Calculs (Pas à Pas)</h3>
+                    <div id="knn-results" class="text-xs font-mono space-y-4 hidden">
+                        <!-- Résultats injectés ici -->
+                    </div>
+                    <div id="knn-placeholder" class="text-sm text-gray-400 italic text-center py-10">
+                        Appuyez sur "Lancer le Calcul" pour voir la magie.
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                        <!-- Results Table -->
-                        <div class="overflow-x-auto mb-6">
-                            <table class="w-full text-xs text-center border-collapse">
-                                <thead class="bg-gray-100 text-gray-700">
-                                    <tr>
-                                        <th class="p-2 border">Famille</th>
-                                        <th class="p-2 border text-red-600">Dist C1 [1,0]</th>
-                                        <th class="p-2 border text-blue-600">Dist C2 [0.5,0.5]</th>
-                                        <th class="p-2 border text-green-600">Dist C3 [0,0.5]</th>
-                                        <th class="p-2 border bg-gray-200">Cluster</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="kmeans-results">
-                                    <tr><td colspan="5" class="p-4 text-gray-400 italic">En attente de simulation...</td></tr>
+        <!-- EXERCICE 2: CLUSTERING -->
+        <section id="ex2" class="view-section hidden fade-in">
+            <!-- Rappel Cours -->
+            <div class="bg-teal-50 p-6 rounded-lg mb-8 border-l-4 border-teal-600">
+                <h2 class="font-bold text-teal-800 text-xl mb-4"><i class="fas fa-lightbulb mr-2"></i> Comprendre K-Means & Normalisation</h2>
+                <div class="space-y-4 text-sm text-gray-700">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-teal-700 mb-1">1. Normalisation (Mise à l'échelle)</h4>
+                            <p class="mb-2">Le Salaire (100 000) est géant par rapport aux Enfants (5). Si on calcule la distance sans changer ça, le Salaire décide de tout.</p>
+                            <div class="calc-box">Valeur' = (Valeur - Min) / (Max - Min)</div>
+                            <p class="text-xs italic">Cela ramène tout entre 0 et 1.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-teal-700 mb-1">2. Calcul du Centre de Gravité</h4>
+                            <p class="mb-2">C'est le "milieu" du groupe. C'est simplement la <strong>MOYENNE</strong>.</p>
+                            <div class="calc-box">Centre = (Somme des X / Nb points, Somme des Y / Nb points)</div>
+                            <p class="text-xs italic">Exemple: Moyenne de 2 et 4, c'est (2+4)/2 = 3.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Contrôles -->
+                <div class="lg:col-span-1 space-y-4">
+                    <div class="glass-panel p-5">
+                        <h3 class="font-bold text-gray-800 mb-2">Données Normalisées</h3>
+                        <div class="text-xs text-gray-500 mb-2 font-mono bg-white p-2 rounded border">
+                            Sal: (val-10k)/100k <br> Enf: val/5
+                        </div>
+                        <div class="overflow-y-auto max-h-60 mb-4">
+                            <table class="w-full text-xs text-center border">
+                                <thead class="bg-teal-100"><tr><th>F</th><th>Sal (x)</th><th>Enf (y)</th></tr></thead>
+                                <tbody>
+                                    <tr><td>F1</td><td>0.6</td><td>1.0</td></tr>
+                                    <tr><td>F2</td><td>0.2</td><td>0.6</td></tr>
+                                    <tr><td>F3</td><td>0.7</td><td>0.2</td></tr>
+                                    <tr><td>F4</td><td>0.0</td><td>0.2</td></tr>
+                                    <tr><td>F5</td><td>0.4</td><td>0.6</td></tr>
+                                    <tr><td>F6</td><td>1.0</td><td>0.0</td></tr>
                                 </tbody>
                             </table>
                         </div>
+                        <button onclick="runKMeansFull()" class="w-full bg-teal-600 text-white py-2 rounded text-sm font-bold hover:bg-teal-700 shadow-md transition">
+                            Lancer Simulation (Pas à Pas)
+                        </button>
+                    </div>
+                    
+                    <div class="glass-panel p-5 bg-teal-50 border-teal-200">
+                        <h3 class="font-bold text-teal-900 mb-2 text-sm">Prédictions (Q4)</h3>
+                        <p class="text-xs text-teal-800 mb-2">Classer F7, F8, F9 selon les clusters finaux.</p>
+                        <button onclick="predictFamilies()" class="w-full bg-white border border-teal-600 text-teal-700 py-1 rounded text-xs font-bold hover:bg-teal-50">
+                            Afficher Résultats
+                        </button>
+                        <div id="pred-res-list" class="text-xs space-y-1 mt-2 hidden bg-white p-2 rounded border border-teal-200 font-mono"></div>
+                    </div>
+                </div>
 
-                        <!-- Updated Centroids -->
-                        <div id="new-centroids-container" class="hidden bg-gray-50 border border-gray-200 rounded-lg p-4">
-                            <h4 class="font-bold text-sm text-gray-700 mb-3">Mise à jour des Centroïdes (Moyennes) :</h4>
-                            <div class="grid sm:grid-cols-3 gap-4 text-xs" id="centroids-display"></div>
+                <!-- Résultats -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="glass-panel p-4 h-[400px] flex flex-col bg-white">
+                        <h3 class="font-bold text-gray-700 mb-2 text-center text-sm">Visualisation des Clusters</h3>
+                        <div class="flex-grow relative">
+                            <canvas id="kmeansChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel p-4 max-h-80 overflow-y-auto bg-white" id="log-container">
+                        <h3 class="font-bold text-gray-700 mb-2 text-sm sticky top-0 bg-white border-b pb-2">Historique des Calculs</h3>
+                        <div id="kmeans-log" class="text-xs space-y-4 font-mono mt-2">
+                             <span class="text-gray-400 italic">En attente...</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- EXERCICE 3 -->
-        <section id="ex3" class="view-section hidden fade-enter">
-            <!-- Theory -->
-            <div class="theory-card p-6 rounded-r-xl mb-8 shadow-sm" style="border-color: #9333ea;">
-                <h2 class="text-2xl font-bold text-purple-800 mb-4 flex items-center"><i class="fas fa-graduation-cap mr-2"></i> Rappel Théorique : Bayes Naïf</h2>
-                <div class="grid md:grid-cols-2 gap-8 text-sm">
+        <!-- EXERCICE 3: BAYES -->
+        <section id="ex3" class="view-section hidden fade-in">
+             <div class="bg-purple-50 p-6 rounded-lg mb-6 border-l-4 border-purple-600">
+                <h2 class="font-bold text-purple-800 text-xl mb-4"><i class="fas fa-lightbulb mr-2"></i> Comprendre Bayes Naïf</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-sm text-gray-700">
                     <div>
-                        <h4 class="font-bold text-purple-700 mb-2 underline decoration-purple-300">Théorème de Bayes</h4>
-                        <p class="mb-2 text-gray-600">Calcul de la probabilité a posteriori $P(C|X)$.</p>
-                        <div class="math-block">P(C|X) = ( P(X|C) * P(C) ) / P(X)</div>
-                        <p class="text-xs text-gray-500 mt-1">On ignore P(X) (constant) et on compare les numérateurs.</p>
+                        <h3 class="font-bold text-purple-700 mb-2">Le Principe</h3>
+                        <p>C'est un calcul de probabilité inversé. On sait que "Si on a le Covid, on a souvent de la fièvre". Bayes nous permet de dire "J'ai de la fièvre, quelle est la probabilité que j'aie le Covid ?".</p>
                     </div>
                     <div>
-                        <h4 class="font-bold text-purple-700 mb-2 underline decoration-purple-300">Hypothèse "Naïve"</h4>
-                        <p class="mb-2 text-gray-600">On suppose l'indépendance des symptômes pour simplifier le calcul.</p>
-                        <div class="math-block">P(X|C) = P(x<sub>1</sub>|C) * P(x<sub>2</sub>|C) * ...</div>
+                        <h3 class="font-bold text-purple-700 mb-2">La Formule de Calcul</h3>
+                        <div class="calc-box">Score = P(Global) * P(Symptôme1) * P(Symptôme2)...</div>
+                        <p class="text-xs mt-1">On fait ce calcul pour "OUI" et pour "NON", et le plus grand score gagne.</p>
                     </div>
                 </div>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Training Data -->
-                <div class="glass-panel p-6 rounded-xl overflow-x-auto">
-                    <h3 class="font-bold text-gray-800 mb-4">1. Données d'Apprentissage</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-center min-w-[300px]">
-                            <thead class="bg-purple-100 text-purple-900 font-bold">
-                                <tr><th>Toux</th><th>Fatigue</th><th>Tête</th><th>Fièvre</th><th>Covid?</th></tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 text-gray-600">
-                                <tr><td>Oui</td><td>Non</td><td>Doux</td><td>Oui</td><td class="font-bold text-red-500 bg-red-50">Non</td></tr>
-                                <tr><td>Oui</td><td>Oui</td><td>Néant</td><td>Non</td><td class="font-bold text-green-500 bg-green-50">Oui</td></tr>
-                                <tr><td>Oui</td><td>Non</td><td>Fort</td><td>Oui</td><td class="font-bold text-green-500 bg-green-50">Oui</td></tr>
-                                <tr><td>Non</td><td>Oui</td><td>Doux</td><td>Oui</td><td class="font-bold text-green-500 bg-green-50">Oui</td></tr>
-                                <tr><td>Non</td><td>Non</td><td>Néant</td><td>Non</td><td class="font-bold text-red-500 bg-red-50">Non</td></tr>
-                                <tr><td>Non</td><td>Oui</td><td>Fort</td><td>Oui</td><td class="font-bold text-green-500 bg-green-50">Oui</td></tr>
-                                <tr><td>Non</td><td>Oui</td><td>Fort</td><td>Non</td><td class="font-bold text-red-500 bg-red-50">Non</td></tr>
-                                <tr><td>Oui</td><td>Oui</td><td>Doux</td><td>Oui</td><td class="font-bold text-green-500 bg-green-50">Oui</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-4 flex justify-between text-xs font-bold text-gray-500 bg-gray-50 p-2 rounded">
-                        <span>Total : 8 Patients</span>
-                        <span>Oui : 5 (62.5%)</span>
-                        <span>Non : 3 (37.5%)</span>
-                    </div>
+                <!-- Données -->
+                <div class="glass-panel p-6 overflow-x-auto">
+                    <h3 class="font-bold text-gray-800 mb-4">Données Observées (8 Patients)</h3>
+                    <table class="w-full text-xs text-center border">
+                        <thead class="bg-purple-100 font-bold"><tr><th>Toux</th><th>Fatigue</th><th>Tête</th><th>Fièvre</th><th>Covid</th></tr></thead>
+                        <tbody class="divide-y text-gray-600">
+                            <!-- Les données exactes du sujet -->
+                            <tr><td>Oui</td><td>Non</td><td>Doux</td><td>Oui</td><td class="font-bold text-red-500">Non</td></tr>
+                            <tr><td>Oui</td><td>Oui</td><td>Néant</td><td>Non</td><td class="font-bold text-green-500">Oui</td></tr>
+                            <tr><td>Oui</td><td>Non</td><td>Fort</td><td>Oui</td><td class="font-bold text-green-500">Oui</td></tr>
+                            <tr><td>Non</td><td>Oui</td><td>Doux</td><td>Oui</td><td class="font-bold text-green-500">Oui</td></tr>
+                            <tr><td>Non</td><td>Non</td><td>Néant</td><td>Non</td><td class="font-bold text-red-500">Non</td></tr>
+                            <tr><td>Non</td><td>Oui</td><td>Fort</td><td>Oui</td><td class="font-bold text-green-500">Oui</td></tr>
+                            <tr><td>Non</td><td>Oui</td><td>Fort</td><td>Non</td><td class="font-bold text-red-500">Non</td></tr>
+                            <tr><td>Oui</td><td>Oui</td><td>Doux</td><td>Oui</td><td class="font-bold text-green-500">Oui</td></tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Calculation -->
-                <div class="glass-panel p-6 rounded-xl bg-white border border-purple-100">
-                    <h3 class="font-bold text-purple-800 mb-4 text-lg">2. Diagnostic du Patient X</h3>
-                    
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
-                        <strong class="block text-gray-700 text-sm mb-2">Symptômes observés :</strong>
-                        <div class="grid grid-cols-4 gap-2 text-xs text-center font-mono font-bold text-gray-700">
-                            <div class="bg-white p-2 rounded shadow-sm border">Toux: Non</div>
-                            <div class="bg-white p-2 rounded shadow-sm border">Fat: Non</div>
-                            <div class="bg-white p-2 rounded shadow-sm border">Tête: Doux</div>
-                            <div class="bg-white p-2 rounded shadow-sm border">Fièvre: Oui</div>
-                        </div>
+                <!-- Calcul -->
+                <div class="glass-panel p-6 bg-purple-50 border-purple-200">
+                    <h3 class="font-bold text-purple-800 mb-4">Diagnostic du Patient X</h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs mb-4 text-gray-600 font-mono">
+                        <div class="bg-white p-2 rounded text-center shadow-sm">Toux: <strong>Non</strong></div>
+                        <div class="bg-white p-2 rounded text-center shadow-sm">Fatigue: <strong>Non</strong></div>
+                        <div class="bg-white p-2 rounded text-center shadow-sm">Tête: <strong>Doux</strong></div>
+                        <div class="bg-white p-2 rounded text-center shadow-sm">Fièvre: <strong>Oui</strong></div>
                     </div>
-
-                    <button onclick="runBayesCalc()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-purple-700 transition transform active:scale-95">
-                        <i class="fas fa-calculator mr-2"></i> Lancer le Calcul Probabiliste
+                    
+                    <button onclick="runBayesCalc()" class="w-full bg-purple-600 text-white py-2 rounded font-bold shadow hover:bg-purple-700 transition">
+                        Lancer le Calcul Détaillé
                     </button>
 
-                    <div id="bayes-calc-results" class="hidden mt-6 space-y-4 animate-fade-in">
-                        <!-- Class YES -->
-                        <div class="bg-green-50 border-l-4 border-green-500 p-3 rounded">
-                            <h4 class="text-xs font-bold text-green-800 uppercase">Classe : Oui (Covid)</h4>
-                            <div class="text-xs font-mono mt-1 text-green-900">
-                                P(Y) * P(T=N|Y) * P(F=N|Y) * P(Te=D|Y) * P(Fv=O|Y)<br>
-                                = 5/8 * 1/5 * 1/5 * 2/5 * 4/5<br>
-                                = 0.625 * 0.2 * 0.2 * 0.4 * 0.8<br>
-                                = <span class="text-lg font-bold">0.0080</span>
-                            </div>
-                        </div>
-
-                        <!-- Class NO -->
-                        <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                            <h4 class="text-xs font-bold text-red-800 uppercase">Classe : Non (Sain)</h4>
-                            <div class="text-xs font-mono mt-1 text-red-900">
-                                P(N) * P(T=N|N) * P(F=N|N) * P(Te=D|N) * P(Fv=O|N)<br>
-                                = 3/8 * 2/3 * 1/3 * 1/3 * 1/3<br>
-                                = 0.375 * 0.67 * 0.33 * 0.33 * 0.33<br>
-                                = <span class="text-lg font-bold">0.0092</span>
-                            </div>
-                        </div>
-
-                        <!-- Conclusion -->
-                        <div class="text-center p-3 bg-gray-800 text-white rounded-lg shadow-lg">
-                            <div class="text-sm font-bold">VERDICT</div>
-                            <div class="text-xs mt-1 text-gray-300">Score(Non) > Score(Oui)</div>
-                            <div class="text-lg font-bold text-red-400 mt-1">PATIENT SAIN</div>
-                        </div>
+                    <div id="bayes-calc-res" class="mt-4 hidden space-y-3 text-xs">
+                         <!-- JS will inject here -->
                     </div>
                 </div>
+            </div>
+            
+             <div class="mt-8 bg-purple-50 p-6 rounded-xl border-l-4 border-purple-500">
+                <h3 class="font-bold text-purple-800 text-sm mb-1">Critique du Modèle</h3>
+                <p class="text-xs text-gray-700">Le modèle "Naïf" suppose que les symptômes ne sont pas liés (ex: Toux et Fièvre sont indépendants). C'est faux médicalement ! Pour de meilleurs résultats, on utiliserait un <strong>Réseau Bayésien</strong> qui prend en compte les liens entre symptômes.</p>
             </div>
         </section>
 
@@ -465,175 +293,255 @@
                 <!-- Profile -->
                 <div class="flex items-center gap-4">
                     <div class="h-16 w-16 rounded-full overflow-hidden border-4 border-blue-400 shadow-xl flex-shrink-0">
-                         <img src="5870834889492907890 (2).jpg" alt="Ahmed Haithem BERKANE" class="h-full w-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=AH&background=3b82f6&color=fff'">
+                         <img src="https://ui-avatars.com/api/?name=AH&background=3b82f6&color=fff" alt="AHB" class="h-full w-full object-cover">
                     </div>
                     <div>
                         <h3 class="font-bold text-xl text-white">Ahmed Haithem BERKANE</h3>
-                        <p class="text-sm text-blue-300 uppercase tracking-wide font-medium">Consultant, Web Developer & AI Solutions</p>
+                        <p class="text-sm text-blue-300 uppercase tracking-wide font-medium">Consultant & Expert IA</p>
                     </div>
                 </div>
                 
-                <!-- Skills Summary (Centered) -->
+                <!-- Skills -->
                 <div class="hidden md:block text-center flex-1 mx-8 border-l border-r border-blue-800 px-4">
                     <p class="text-sm font-light text-blue-100 italic mb-2">"L'IA n'est pas une magie, c'est une mathématique appliquée."</p>
                     <div class="flex justify-center gap-2 flex-wrap">
                         <span class="bg-blue-800 text-xs px-2 py-1 rounded text-blue-200">FullStack Dev</span>
                         <span class="bg-blue-800 text-xs px-2 py-1 rounded text-blue-200">Machine Learning</span>
-                        <span class="bg-blue-800 text-xs px-2 py-1 rounded text-blue-200">Formation & Pédagogie</span>
+                        <span class="bg-blue-800 text-xs px-2 py-1 rounded text-blue-200">Formation</span>
                     </div>
                 </div>
 
-                <!-- Contact Info -->
-                <div class="text-center md:text-right space-y-1">
-                    <a href="mailto:haithem-berkane@hotmail.fr" class="block text-sm text-gray-300 hover:text-white transition"><i class="fas fa-envelope mr-2 text-blue-400"></i>haithem-berkane@hotmail.fr</a>
-                    <a href="tel:+213661338333" class="block text-sm text-gray-300 hover:text-white transition"><i class="fas fa-phone mr-2 text-green-400"></i>+213 661 33 83 33</a>
-                    <p class="text-sm text-gray-300"><i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Bordj Bou Arréridj, Algeria</p>
+                <!-- Contact -->
+                <div class="text-center md:text-right space-y-1 text-sm text-blue-100">
+                    <p><i class="fas fa-envelope mr-1"></i> haithem-berkane@hotmail.fr</p>
+                    <p><i class="fas fa-phone mr-1"></i> +213 661 33 83 33</p>
+                    <p><i class="fas fa-map-marker-alt mr-1"></i> Bordj Bou Arréridj, Algérie</p>
                 </div>
             </div>
-            
-            <!-- Mobile Quote (Visible only on mobile) -->
-            <div class="md:hidden text-center mt-6 pt-4 border-t border-blue-800">
-                <p class="text-sm font-light text-blue-200 italic">"L'IA n'est pas une magie, c'est une mathématique appliquée."</p>
-            </div>
-
-            <div class="mt-8 pt-6 border-t border-blue-800 text-center text-xs text-blue-400">
-                <p>&copy; 2026 - Ahmed Haithem BERKANE. Tous droits réservés.</p>
+            <div class="mt-8 pt-4 border-t border-blue-800 text-center text-xs text-blue-400">
+                &copy; 2026 - Ahmed Haithem BERKANE.
             </div>
         </div>
     </footer>
 
     <script>
-        // --- Navigation Logic ---
+        // --- Navigation ---
         function nav(id) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(id);
             target.classList.remove('hidden');
-            target.classList.remove('fade-enter');
-            void target.offsetWidth; 
-            target.classList.add('fade-enter');
+            target.classList.remove('fade-in');
+            void target.offsetWidth; target.classList.add('fade-in');
 
-            // Update Desktop Buttons
             document.querySelectorAll('.nav-btn').forEach(b => {
                 b.classList.remove('nav-active', 'text-blue-600');
                 b.classList.add('text-gray-500');
             });
-            const deskBtn = document.querySelector(`.nav-btn[data-target="${id}"]`);
-            if(deskBtn) { deskBtn.classList.add('nav-active', 'text-blue-600'); deskBtn.classList.remove('text-gray-500'); }
+            const btn = document.querySelector(`button[data-target="${id}"]`);
+            if(btn) { btn.classList.add('nav-active', 'text-blue-600'); btn.classList.remove('text-gray-500'); }
+
+            if(id === 'ex1') init3DPlot();
+            if(id === 'ex2') initChart();
         }
 
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        // --- EX 1: KNN ---
+        function init3DPlot() {
+            // Plotly code remains similar
+            const T_iso = { x:[2,2], y:[2,4], z:[1,4], mode:'markers+text', type:'scatter3d', name:'Isocèle (Train)', text:['T1','T3'], marker:{size:6, color:'blue'} };
+            const T_equi = { x:[5], y:[5], z:[5], mode:'markers+text', type:'scatter3d', name:'Équilatéral (Train)', text:['T5'], marker:{size:6, color:'red'} };
+            const T_test = { x:[1,1], y:[5,1], z:[5,1], mode:'markers+text', type:'scatter3d', name:'Test', text:['T2','T4'], marker:{size:8, color:'orange', symbol:'diamond'} };
+            const layout = { margin: {l:0, r:0, b:0, t:0}, scene: { xaxis:{title:'a'}, yaxis:{title:'b'}, zaxis:{title:'c'} }, height: 400 };
+            Plotly.newPlot('plot3d', [T_iso, T_equi, T_test], layout);
         }
 
-        // --- EX 1: KNN LOGIC ---
-        const triangles = [
-            {id: "T1", a:2, b:2, c:1, class: 1, type: "Isocèle", set: "Train"},
-            {id: "T3", a:2, b:4, c:4, class: 1, type: "Isocèle", set: "Train"},
-            {id: "T5", a:5, b:5, c:5, class: 2, type: "Équilatéral", set: "Train"},
-            {id: "T2", a:1, b:5, c:5, class: 1, type: "Isocèle", set: "Test"},
-            {id: "T4", a:1, b:1, c:1, class: 2, type: "Équilatéral", set: "Test"}
-        ];
-
-        function initKNN() {
-            const tbody = document.getElementById('knn-train-body');
-            triangles.forEach(t => {
-                const badge = t.set === "Train" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700";
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="p-3 font-bold">${t.id}</td>
-                        <td class="p-3">(${t.a}, ${t.b}, ${t.c})</td>
-                        <td class="p-3">Cl ${t.class}</td>
-                        <td class="p-3 text-xs">${t.type}</td>
-                    </tr>`;
-            });
+        function runKNN() {
+            const html = `
+                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                    <strong class="text-indigo-700">Test T2 (1, 5, 5)</strong>
+                    <div class="mt-2 pl-2 border-l-2 border-indigo-200">
+                        d(T1) = |1-2|+|5-2|+|5-1| = 1+3+4 = 8<br>
+                        d(T3) = |1-2|+|5-4|+|5-4| = 1+1+1 = <strong class="text-green-600">3 (Min)</strong><br>
+                        d(T5) = |1-5|+|5-5|+|5-5| = 4+0+0 = 4
+                    </div>
+                    <div class="mt-1 bg-green-100 text-green-800 px-2 py-1 rounded text-center font-bold">Voisin: T3 (Isocèle) -> OK</div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                    <strong class="text-indigo-700">Test T4 (1, 1, 1)</strong>
+                    <div class="mt-2 pl-2 border-l-2 border-indigo-200">
+                        d(T1) = |1-2|+|1-2|+|1-1| = 1+1+0 = <strong class="text-green-600">2 (Min)</strong><br>
+                        d(T3) = |1-2|+|1-4|+|1-4| = 1+3+3 = 7<br>
+                        d(T5) = |1-5|+|1-5|+|1-5| = 4+4+4 = 12
+                    </div>
+                    <div class="mt-1 bg-red-100 text-red-800 px-2 py-1 rounded text-center font-bold">
+                        Voisin: T1 (Isocèle) -> ERREUR<br>
+                        <span class="text-[10px] font-normal">T4 est Équilatéral (1=1=1) !</span>
+                    </div>
+                </div>`;
+            document.getElementById('knn-placeholder').classList.add('hidden');
+            document.getElementById('knn-results').classList.remove('hidden');
+            document.getElementById('knn-results').innerHTML = html;
         }
-        initKNN();
 
-        // --- EX 2: K-MEANS LOGIC ---
+        // --- EX 2: K-Means ---
         const families = [
             {id:"F1", x:0.6, y:1.0}, {id:"F2", x:0.2, y:0.6},
             {id:"F3", x:0.7, y:0.2}, {id:"F4", x:0.0, y:0.2},
             {id:"F5", x:0.4, y:0.6}, {id:"F6", x:1.0, y:0.0}
         ];
         let finalCentroids = [];
+        let chartInstance = null;
 
-        function runKMeans() {
-            const tbody = document.getElementById('kmeans-results');
-            tbody.innerHTML = "";
-            
-            // Initial Centroids
-            let C = [{x:1, y:0}, {x:0.5, y:0.5}, {x:0, y:0.5}]; // C1, C2, C3
-            let clusters = [[], [], []];
-
-            families.forEach(f => {
-                let d1 = Math.abs(f.x - C[0].x) + Math.abs(f.y - C[0].y);
-                let d2 = Math.abs(f.x - C[1].x) + Math.abs(f.y - C[1].y);
-                let d3 = Math.abs(f.x - C[2].x) + Math.abs(f.y - C[2].y);
-                
-                let min = Math.min(d1, d2, d3);
-                let cIdx = (min===d1)?0 : (min===d2)?1 : 2;
-                clusters[cIdx].push(f);
-
-                // Table Row
-                tbody.innerHTML += `
-                    <tr class="border-b border-gray-100">
-                        <td class="font-bold text-gray-700 py-1">${f.id}</td>
-                        <td class="${cIdx===0?'text-red-600 font-bold':''} text-gray-500">${d1.toFixed(2)}</td>
-                        <td class="${cIdx===1?'text-blue-600 font-bold':''} text-gray-500">${d2.toFixed(2)}</td>
-                        <td class="${cIdx===2?'text-green-600 font-bold':''} text-gray-500">${d3.toFixed(2)}</td>
-                        <td class="font-bold text-gray-800">C${cIdx+1}</td>
-                    </tr>`;
-            });
-
-            // Update Centroids
-            const display = document.getElementById('centroids-display');
-            display.innerHTML = "";
-            document.getElementById('new-centroids-container').classList.remove('hidden');
-            
-            finalCentroids = clusters.map((clust, i) => {
-                if(clust.length===0) {
-                    display.innerHTML += `<div class="text-gray-400">C${i+1}' : Vide</div>`;
-                    return C[i];
+        function initChart() {
+            const ctx = document.getElementById('kmeansChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        { label: 'Familles', data: families.map(f=>({x:f.x, y:f.y})), backgroundColor: 'gray' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: {min:-0.1, max:1.1, title:{display:true, text:'Salaire Norm'}}, y: {min:-0.1, max:1.1, title:{display:true, text:'Enfants Norm'}} }
                 }
-                let avgX = clust.reduce((s,p)=>s+p.x,0)/clust.length;
-                let avgY = clust.reduce((s,p)=>s+p.y,0)/clust.length;
-                let color = i===0?'text-red-600':(i===1?'text-blue-600':'text-green-600');
-                
-                display.innerHTML += `<div class="${color} font-bold border p-2 rounded bg-white">C${i+1}' : [${avgX.toFixed(2)}, ${avgY.toFixed(2)}]</div>`;
-                return {x: avgX, y: avgY};
             });
         }
 
-        function predictAll() {
-            let C = finalCentroids.length ? finalCentroids : [{x:1, y:0}, {x:0.5, y:0.5}, {x:0, y:0.5}];
-            
-            // F7(90k, 2) -> Norm: (0.8, 0.4)
-            // F8(50k, 3) -> Norm: (0.4, 0.6)
-            // F9(20k, 2) -> Norm: (0.1, 0.4)
-            const preds = [
-                {id:'f7', x:0.8, y:0.4},
-                {id:'f8', x:0.4, y:0.6},
-                {id:'f9', x:0.1, y:0.4}
-            ];
+        function runKMeansFull() {
+            const logDiv = document.getElementById('kmeans-log');
+            logDiv.innerHTML = "";
+            let C = [{x:1, y:0}, {x:0.5, y:0.5}, {x:0, y:0.5}]; // C1, C2, C3
+            let iterations = 0;
+            let maxIter = 5; 
+            let clusters = [[], [], []];
 
-            preds.forEach(p => {
-                let d1 = Math.abs(p.x - C[0].x) + Math.abs(p.y - C[0].y);
-                let d2 = Math.abs(p.x - C[1].x) + Math.abs(p.y - C[1].y);
-                let d3 = Math.abs(p.x - C[2].x) + Math.abs(p.y - C[2].y);
-                let min = Math.min(d1, d2, d3);
-                let clust = (min===d1)?"C1 (10k)":(min===d2)?"C2 (30k)":"C3 (60k)";
-                let color = (min===d1)?"text-red-600":(min===d2)?"text-blue-600":"text-green-600";
+            while(iterations < maxIter) {
+                iterations++;
+                let currentClusters = [[], [], []];
+                families.forEach(f => {
+                    let d0 = Math.abs(f.x - C[0].x) + Math.abs(f.y - C[0].y);
+                    let d1 = Math.abs(f.x - C[1].x) + Math.abs(f.y - C[1].y);
+                    let d2 = Math.abs(f.x - C[2].x) + Math.abs(f.y - C[2].y);
+                    let min = Math.min(d0, d1, d2);
+                    if(min===d0) currentClusters[0].push(f);
+                    else if(min===d1) currentClusters[1].push(f);
+                    else currentClusters[2].push(f);
+                });
+
+                // Compute New Centroids with String representation for display
+                let newC = currentClusters.map((cl, i) => {
+                    if(cl.length === 0) return C[i];
+                    let sumX = cl.reduce((s,p)=>s+p.x,0);
+                    let sumY = cl.reduce((s,p)=>s+p.y,0);
+                    let ax = sumX/cl.length;
+                    let ay = sumY/cl.length;
+                    // Detail string for log
+                    let detail = `(${cl.map(p=>p.x.toFixed(1)).join('+')})/${cl.length}`;
+                    return {x:ax, y:ay, detail:detail};
+                });
+
+                let iterHTML = `
+                    <div class="mb-4 border-b border-gray-200 pb-2">
+                        <strong class="text-indigo-700 block mb-1">Itération ${iterations}</strong>
+                        <div class="pl-2 border-l-2 border-indigo-100">
+                             <div class="text-gray-600">
+                                <span class="text-red-600 font-bold">C1</span> : {${currentClusters[0].map(f=>f.id).join(',')}}
+                                <br><span class="text-[10px] text-slate-500">MoyX=${newC[0].detail} = <strong>${newC[0].x.toFixed(2)}</strong></span>
+                             </div>
+                             <div class="text-gray-600 mt-1">
+                                <span class="text-blue-600 font-bold">C2</span> : {${currentClusters[1].map(f=>f.id).join(',')}}
+                                <br><span class="text-[10px] text-slate-500">MoyX=${newC[1].detail} = <strong>${newC[1].x.toFixed(2)}</strong></span>
+                             </div>
+                             <div class="text-gray-600 mt-1">
+                                <span class="text-green-600 font-bold">C3</span> : {${currentClusters[2].map(f=>f.id).join(',')}}
+                                <br><span class="text-[10px] text-slate-500">MoyX=${newC[2].detail} = <strong>${newC[2].x.toFixed(2)}</strong></span>
+                             </div>
+                        </div>
+                    </div>`;
+                logDiv.innerHTML += iterHTML;
+
+                let stable = true;
+                for(let k=0; k<3; k++) if(C[k].x !== newC[k].x || C[k].y !== newC[k].y) stable = false;
                 
-                document.getElementById(`pred-${p.id}`).innerHTML = `<span class="${color}">${clust}</span>`;
+                C = newC;
+                clusters = currentClusters;
+
+                if(stable) {
+                    logDiv.innerHTML += `<div class="text-green-700 font-bold bg-green-50 p-2 rounded text-center">Convergence atteinte !</div>`;
+                    break;
+                }
+            }
+            finalCentroids = C;
+            updateChart(families, finalCentroids, clusters);
+        }
+
+        function updateChart(points, centroids, clusters) {
+            const ctx = document.getElementById('kmeansChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        { label: 'C1', data: clusters[0].map(p => ({x: p.x, y: p.y})), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
+                        { label: 'C2', data: clusters[1].map(p => ({x: p.x, y: p.y})), backgroundColor: 'rgba(37, 99, 235, 0.7)' },
+                        { label: 'C3', data: clusters[2].map(p => ({x: p.x, y: p.y})), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
+                        { label: 'Centres', data: centroids.map(c => ({x: c.x, y: c.y})), backgroundColor: 'white', borderColor: 'black', borderWidth: 2, pointStyle: 'rectRot', pointRadius: 8 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: {min:-0.1, max:1.1}, y: {min:-0.1, max:1.1} }
+                }
             });
+        }
+
+        function predictFamilies() {
+            if(finalCentroids.length === 0) { alert("Lancez d'abord K-Means !"); return; }
+            const preds = [{id:'F7',x:0.8,y:0.4},{id:'F8',x:0.4,y:0.6},{id:'F9',x:0.1,y:0.4}];
+            let html = "";
+            preds.forEach(p => {
+                let d = finalCentroids.map(c => Math.abs(p.x - c.x) + Math.abs(p.y - c.y));
+                let idx = d.indexOf(Math.min(...d));
+                let sub = idx===0 ? "10k" : idx===1 ? "30k" : "60k";
+                let col = idx===0 ? "text-red-600" : idx===1 ? "text-blue-600" : "text-green-600";
+                html += `<div>${p.id} &rarr; <span class="${col} font-bold">C${idx+1} (${sub})</span></div>`;
+            });
+            const res = document.getElementById('pred-res-list');
+            res.innerHTML = html;
+            res.classList.remove('hidden');
         }
 
         // --- EX 3: Bayes ---
         function runBayesCalc() {
-            document.getElementById('bayes-calc-results').classList.remove('hidden');
+             const div = document.getElementById('bayes-calc-res');
+             div.classList.remove('hidden');
+             div.innerHTML = `
+                <div class="space-y-3">
+                    <div class="p-3 bg-green-50 rounded border border-green-200">
+                        <strong class="text-green-700">OUI (Covid)</strong>
+                        <div class="mt-1 font-mono text-gray-600 text-[10px]">
+                            5/8 * 1/5 * 1/5 * 2/5 * 4/5<br>
+                            = 0.625 * 0.2 * 0.2 * 0.4 * 0.8<br>
+                            = <span class="text-lg font-bold text-green-800">0.0080</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-red-50 rounded border border-red-200">
+                        <strong class="text-red-700">NON (Sain)</strong>
+                        <div class="mt-1 font-mono text-gray-600 text-[10px]">
+                            3/8 * 2/3 * 1/3 * 1/3 * 1/3<br>
+                            = 0.375 * 0.66 * 0.33 * 0.33 * 0.33<br>
+                            = <span class="text-lg font-bold text-red-800">0.0092</span>
+                        </div>
+                    </div>
+                    <div class="p-2 bg-gray-800 text-white text-center rounded font-bold">
+                        0.0092 > 0.0080 -> PATIENT SAIN
+                    </div>
+                </div>
+             `;
         }
-
     </script>
 </body>
 </html>
